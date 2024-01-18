@@ -12,7 +12,7 @@ def speech_to_text():
     try:
         # Use Google Web Speech API to convert speech to text
         text = recognizer.recognize_google(audio)
-        
+        print(text)
         return text
     except sr.UnknownValueError:
         return "error"

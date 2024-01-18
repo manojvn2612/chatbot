@@ -1,6 +1,11 @@
 {
     "intents":[
         {
+            "tag" :"None",
+            "patterns":[],
+            "responses":["Sorry, I didn't get that. Can you please repeat?","Tujhi Aachi Gand Spacth Bol"]
+        },
+        {
             "tag":"Greetings",
             "patterns":["hello","hey","hi","good day","Greetings","what's up?","how is it going?"],
             "responses":["Hello!","Hey!","What can I do for you?","Jai Shree Ram"]
@@ -26,8 +31,9 @@
             "responses":["Opening"]
         },
         {
-            "tag":[],
-            "patterns":[],
-            "responses":["Pls Give Correct"]
+            "tag" : "Search",
+            "patterns":["Search"],
+            "responses":["Searching"]
         }
-]}
+    ]
+}

@@ -128,23 +128,37 @@ class Assistant:
                     input_bag_of_words[i] = 1
 
         input_bag_of_words = np.array([input_bag_of_words])
+        if np.all(input_bag_of_words == 0):
+            predicted_intent = None
+            return predicted_intent
+        print(input_bag_of_words)
         predictions = self.model.predict(input_bag_of_words, verbose=0)[0]
         predicted_intent = self.intents[np.argmax(predictions)]
+        print(predicted_intent)
+        if predicted_intent is None:
+            return("I don't understand. Please try again.")
         if predicted_intent == "app":
             import os
-            if input_word[1] == "chrome":
-                os.system("start chrome")
-            elif input_word[1] == "edge":
-                os.system("start msedge")
+            try:
+                if input_words[1] == "chrome":
+                    os.system("start chrome")
+                elif input_words[1] == "edge":
+                    os.system("start msedge")
+            except IndexError:
+                print("Give Something to open")
+                return 
             
-        max_prob = np.max(predictions)
+        self.max_prob = np.max(predictions)
+        print(self.max_prob)
         return predicted_intent
 
     def process_input(self, input_text: str):
         predicted_intent = self._predict_intent(input_text)
 
         try:
-            if predicted_intent in self.method_mappings:
+            if not predicted_intent:
+                return "I'm sorry, I don't have information on that. Can you try something else?"
+            elif predicted_intent in self.method_mappings:
                 self.method_mappings[predicted_intent]()
 
             for intent in self.intents_data["intents"]:
