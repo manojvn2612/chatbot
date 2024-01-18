@@ -12,3 +12,11 @@ used os module for overcoming the warning given out by tensorflow
 used numpy for array's
 
 used nltk i.e natural language tool kit
+
+It can open app like edge,chrome and in future we will add some more applications
+
+# Device
+
+OS:- Win 11,
+processor :- i5 12th gen,
+python veersion :- 3.11.1
