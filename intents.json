@@ -3,7 +3,7 @@
         {
             "tag" :"None",
             "patterns":[],
-            "responses":["Sorry, I didn't get that. Can you please repeat?","Tujhi Aachi Gand Spacth Bol"]
+            "responses":["Sorry, I didn't get that. Can you please repeat?"]
         },
         {
             "tag":"Greetings",
@@ -17,7 +17,7 @@
         },
         {
             "tag":"age",
-            "patterns":["how old","how old is tim","what is your age","how old are you","age?"],
+            "patterns":["how old","how old is Manoj","what is your age","how old are you","age?"],
             "responses":["I am 19 years old!","19 years young!"]
         },
         {

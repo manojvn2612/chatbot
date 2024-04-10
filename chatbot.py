@@ -77,7 +77,6 @@ class Assistant:
 
         X = np.array([data[0] for data in self.training_data])
         y = np.array([data[1] for data in self.training_data])
-
         return X, y
 
     def fit_model(self, optimizer: Optimizer = None, epochs: int = 200):
@@ -97,15 +96,12 @@ class Assistant:
             for layer in self.hidden_layers:
                 self.model.add(layer)
             self.model.add(Dense(y.shape[1], activation='softmax'))
-
-
         if optimizer is None:
             optimizer = Adam(learning_rate=0.01)
 
         self.model.compile(loss="categorical_crossentropy", optimizer=optimizer, metrics=["accuracy"])
 
         self.history = self.model.fit(X, y, epochs=epochs, batch_size=5, verbose=1)
-
     def save_model(self):
         self.model.save(f"{self.model_name}.keras", self.history)
         pickle.dump(self.words, open(f'{self.model_name}_words.pkl', 'wb'))
@@ -118,20 +114,21 @@ class Assistant:
 
     def _predict_intent(self, input_text: str):
         input_words = nltk.word_tokenize(input_text)
+        #print(input_words)
         input_words = [self.lemmatizer.lemmatize(w.lower()) for w in input_words]
 
         input_bag_of_words = [0] * len(self.words)
-        
+        #print(self.words)
         for input_word in input_words:
             for i, word in enumerate(self.words):
                 if input_word == word:
                     input_bag_of_words[i] = 1
 
         input_bag_of_words = np.array([input_bag_of_words])
-        if np.all(input_bag_of_words == 0):
+        if np.all(len(input_bag_of_words) == 0):
             predicted_intent = None
             return predicted_intent
-        print(input_bag_of_words)
+        #print(input_bag_of_words)
         predictions = self.model.predict(input_bag_of_words, verbose=0)[0]
         predicted_intent = self.intents[np.argmax(predictions)]
         print(predicted_intent)
@@ -149,7 +146,7 @@ class Assistant:
                 return 
             
         self.max_prob = np.max(predictions)
-        print(self.max_prob)
+        #print(self.max_prob)
         return predicted_intent
 
     def process_input(self, input_text: str):
