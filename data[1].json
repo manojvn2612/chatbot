@@ -1,0 +1,690 @@
+[
+  {
+    "code": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+    "function_name": "bubble_sort",
+    "docstring": "Bubble Sort repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This pass through the list is repeated until the list is sorted.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "bubble sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and key < arr[j]:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr",
+    "function_name": "insertion_sort",
+    "docstring": "Insertion Sort builds the sorted array one element at a time by repeatedly picking the next element and inserting it into its correct position in the already sorted part of the array.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "insertion sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+    "function_name": "binary_search",
+    "docstring": "Binary Search finds the position of a target value within a sorted array by repeatedly dividing the search interval in half.",
+    "language": "python",
+    "tags": ["search", "algorithm", "binary search"],
+    "dataset": "search_algorithms"
+  },
+  {
+    "code": "def linear_search(arr, target):\n    for i in range(len(arr)):\n        if arr[i] == target:\n            return i\n    return -1",
+    "function_name": "linear_search",
+    "docstring": "Linear Search sequentially checks each element of the list until a match is found or the whole list has been searched.",
+    "language": "python",
+    "tags": ["search", "algorithm", "linear search"],
+    "dataset": "search_algorithms"
+  },
+  {
+    "code": "def merge_sort(arr):\n    if len(arr) > 1:\n        mid = len(arr) // 2\n        L = arr[:mid]\n        R = arr[mid:]\n\n        merge_sort(L)\n        merge_sort(R)\n\n        i = j = k = 0\n\n        while i < len(L) and j < len(R):\n            if L[i] < R[j]:\n                arr[k] = L[i]\n                i += 1\n            else:\n                arr[k] = R[j]\n                j += 1\n            k += 1\n\n        while i < len(L):\n            arr[k] = L[i]\n            i += 1\n            k += 1\n\n        while j < len(R):\n            arr[k] = R[j]\n            j += 1\n            k += 1\n    return arr",
+    "function_name": "merge_sort",
+    "docstring": "Merge Sort is a divide-and-conquer algorithm that recursively splits the list into halves, sorts each half, and then merges the sorted halves back together.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "merge sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    else:\n        pivot = arr[len(arr) // 2]\n        left = [x for x in arr if x < pivot]\n        middle = [x for x in arr if x == pivot]\n        right = [x for x in arr if x > pivot]\n        return quick_sort(left) + middle + quick_sort(right)",
+    "function_name": "quick_sort",
+    "docstring": "Quick Sort is a divide-and-conquer algorithm. It selects a 'pivot' element from the list, partitions the other elements into those less than the pivot and those greater, and then recursively sorts the sub-arrays.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "quick sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def heap_sort(arr):\n    def heapify(arr, n, i):\n        largest = i\n        left = 2 * i + 1\n        right = 2 * i + 2\n\n        if left < n and arr[left] > arr[largest]:\n            largest = left\n\n        if right < n and arr[right] > arr[largest]:\n            largest = right\n\n        if largest != i:\n            arr[i], arr[largest] = arr[largest], arr[i]\n            heapify(arr, n, largest)\n\n    n = len(arr)\n    for i in range(n // 2 - 1, -1, -1):\n        heapify(arr, n, i)\n\n    for i in range(n-1, 0, -1):\n        arr[i], arr[0] = arr[0], arr[i]\n        heapify(arr, i, 0)\n    return arr",
+    "function_name": "heap_sort",
+    "docstring": "Heap Sort builds a max heap from the list, then repeatedly extracts the largest element (the root of the heap) and rebuilds the heap, thereby sorting the list.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "heap sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def counting_sort(arr):\n    max_val = max(arr)\n    count = [0] * (max_val + 1)\n    output = [0] * len(arr)\n\n    for num in arr:\n        count[num] += 1\n\n    for i in range(1, len(count)):\n        count[i] += count[i - 1]\n\n    for num in reversed(arr):\n        output[count[num] - 1] = num\n        count[num] -= 1\n\n    return output",
+    "function_name": "counting_sort",
+    "docstring": "Counting Sort counts the occurrences of each unique element in the list, and then uses this count information to place each element in its correct position in the output array.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "counting sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def radix_sort(arr):\n    def counting_sort_for_radix(arr, exp):\n        n = len(arr)\n        output = [0] * n\n        count = [0] * 10\n\n        for i in range(n):\n            index = arr[i] // exp\n            count[index % 10] += 1\n\n        for i in range(1, 10):\n            count[i] += count[i - 1]\n\n        i = n - 1\n        while i >= 0:\n            index = arr[i] // exp\n            output[count[index % 10] - 1] = arr[i]\n            count[index % 10] -= 1\n            i -= 1\n\n        for i in range(len(arr)):\n            arr[i] = output[i]\n\n    max_val = max(arr)\n    exp = 1\n    while max_val // exp > 0:\n        counting_sort_for_radix(arr, exp)\n        exp *= 10\n    return arr",
+    "function_name": "radix_sort",
+    "docstring": "Radix Sort processes the list digit by digit, starting from the least significant digit to the most significant digit, grouping numbers by each digit's value.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "radix sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def shell_sort(arr):\n    n = len(arr)\n    gap = n // 2\n    while gap > 0:\n        for i in range(gap, n):\n            temp = arr[i]\n            j = i\n            while j >= gap and arr[j - gap] > temp:\n                arr[j] = arr[j - gap]\n                j -= gap\n            arr[j] = temp\n        gap //= 2\n    return arr",
+    "function_name": "shell_sort",
+    "docstring": "Shell Sort is an extension of Insertion Sort that allows the exchange of far apart elements. It improves on Insertion Sort by comparing elements distant apart, gradually reducing the gap.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "shell sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def gcd(a, b):\n    while b != 0:\n        a, b = b, a % b\n    return a",
+    "function_name": "gcd",
+    "docstring": "The Greatest Common Divisor (GCD) algorithm finds the largest integer that divides both numbers without leaving a remainder using the Euclidean algorithm.",
+    "language": "python",
+    "tags": ["math", "algorithm", "gcd"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def lcm(a, b):\n    return abs(a * b) // gcd(a, b)",
+    "function_name": "lcm",
+    "docstring": "The Least Common Multiple (LCM) of two numbers is the smallest positive integer that is divisible by both numbers. It is computed using the GCD formula.",
+    "language": "python",
+    "tags": ["math", "algorithm", "lcm"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n - 1)",
+    "function_name": "factorial",
+    "docstring": "Factorial of a non-negative integer is the product of all positive integers less than or equal to that number. It's calculated using recursion.",
+    "language": "python",
+    "tags": ["math", "algorithm", "factorial"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def fibonacci(n):\n    if n <= 1:\n        return n\n    else:\n        return fibonacci(n - 1) + fibonacci(n - 2)",
+    "function_name": "fibonacci",
+    "docstring": "Fibonacci series is a sequence where each number is the sum of the two preceding ones. It starts with 0 and 1 and can be computed using recursion.",
+    "language": "python",
+    "tags": ["math", "algorithm", "fibonacci"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def palindrome_check(s):\n    return s == s[::-1]",
+    "function_name": "palindrome_check",
+    "docstring": "Checks if a given string is a palindrome by comparing it with its reverse.",
+    "language": "python",
+    "tags": ["string manipulation", "palindrome"],
+    "dataset": "string_algorithms"
+  },
+  {
+    "code": "def reverse_string(s):\n    return s[::-1]",
+    "function_name": "reverse_string",
+    "docstring": "Reverses a given string.",
+    "language": "python",
+    "tags": ["string manipulation", "reverse"],
+    "dataset": "string_algorithms"
+  },
+  {
+    "code": "def count_vowels(s):\n    vowels = 'aeiouAEIOU'\n    count = 0\n    for char in s:\n        if char in vowels:\n            count += 1\n    return count",
+    "function_name": "count_vowels",
+    "docstring": "Counts the number of vowels in a given string.",
+    "language": "python",
+    "tags": ["string manipulation", "vowel count"],
+    "dataset": "string_algorithms"
+  },
+  {
+    "code": "def anagram_check(str1, str2):\n    return sorted(str1) == sorted(str2)",
+    "function_name": "anagram_check",
+    "docstring": "Checks if two strings are anagrams by comparing their sorted characters.",
+    "language": "python",
+    "tags": ["string manipulation", "anagram"],
+    "dataset": "string_algorithms"
+  },
+  {
+    "code": "def is_prime(n):\n    if n <= 1:\n        return False\n    for i in range(2, int(n ** 0.5) + 1):\n        if n % i == 0:\n            return False\n    return True",
+    "function_name": "is_prime",
+    "docstring": "Checks if a given number is prime by testing divisibility up to the square root of the number.",
+    "language": "python",
+    "tags": ["math", "prime check"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def quickselect(arr, k):\n    if len(arr) == 1:\n        return arr[0]\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    if k < len(left):\n        return quickselect(left, k)\n    elif k < len(left) + len(middle):\n        return middle[0]\n    else:\n        return quickselect(right, k - len(left) - len(middle))",
+    "function_name": "quickselect",
+    "docstring": "Quickselect is an efficient algorithm to find the k-th smallest element in an unordered list.",
+    "language": "python",
+    "tags": ["algorithm", "selection", "quickselect"],
+    "dataset": "search_algorithms"
+  },
+  {
+    "code": "def knapsack(values, weights, capacity):\n    n = len(values)\n    dp = [[0 for _ in range(capacity + 1)] for _ in range(n + 1)]\n    for i in range(1, n + 1):\n        for w in range(capacity + 1):\n            if weights[i - 1] <= w:\n                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1])\n            else:\n                dp[i][w] = dp[i - 1][w]\n    return dp[n][capacity]",
+    "function_name": "knapsack",
+    "docstring": "Solves the 0/1 knapsack problem using dynamic programming. It finds the maximum value of items that can be included in a knapsack of limited capacity.",
+    "language": "python",
+    "tags": ["algorithm", "dynamic programming", "knapsack"],
+    "dataset": "dynamic_programming"
+  },
+  {
+    "code": "def huffman_encoding(frequencies):\n    import heapq\n    heap = [[weight, [symbol, '']] for symbol, weight in frequencies.items()]\n    heapq.heapify(heap)\n    while len(heap) > 1:\n        lo = heapq.heappop(heap)\n        hi = heapq.heappop(heap)\n        for pair in lo[1:]:\n            pair[1] = '0' + pair[1]\n        for pair in hi[1:]:\n            pair[1] = '1' + pair[1]\n        heapq.heappush(heap, [lo[0] + hi[0]] + lo[1:] + hi[1:])\n    return sorted(heapq.heappop(heap)[1:], key=lambda p: (len(p[-1]), p))",
+    "function_name": "huffman_encoding",
+    "docstring": "Huffman Encoding is a lossless data compression algorithm that assigns variable-length codes to input characters, with shorter codes assigned to more frequent characters.",
+    "language": "python",
+    "tags": ["algorithm", "greedy", "huffman encoding"],
+    "dataset": "greedy_algorithms"
+  },
+  {
+    "code": "def dijkstra(graph, start):\n    import heapq\n    queue = [(0, start)]\n    distances = {vertex: float('infinity') for vertex in graph}\n    distances[start] = 0\n    while queue:\n        current_distance, current_vertex = heapq.heappop(queue)\n        if current_distance > distances[current_vertex]:\n            continue\n        for neighbor, weight in graph[current_vertex].items():\n            distance = current_distance + weight\n            if distance < distances[neighbor]:\n                distances[neighbor] = distance\n                heapq.heappush(queue, (distance, neighbor))\n    return distances",
+    "function_name": "dijkstra",
+    "docstring": "Dijkstra's algorithm finds the shortest paths from the source node to all other nodes in a weighted graph.",
+    "language": "python",
+    "tags": ["graph", "algorithm", "dijkstra"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1",
+    "function_name": "binary_search",
+    "docstring": "Binary Search algorithm finds the position of a target value within a sorted array. It repeatedly divides the search interval in half.",
+    "language": "python",
+    "tags": ["search", "algorithm", "binary search"],
+    "dataset": "search_algorithms"
+  },
+  {
+    "code": "def linear_search(arr, target):\n    for i in range(len(arr)):\n        if arr[i] == target:\n            return i\n    return -1",
+    "function_name": "linear_search",
+    "docstring": "Linear Search algorithm checks each element of the array sequentially to find the target value.",
+    "language": "python",
+    "tags": ["search", "algorithm", "linear search"],
+    "dataset": "search_algorithms"
+  },
+  {
+    "code": "def dfs(graph, start, visited=None):\n    if visited is None:\n        visited = set()\n    visited.add(start)\n    for neighbor in graph[start]:\n        if neighbor not in visited:\n            dfs(graph, neighbor, visited)\n    return visited",
+    "function_name": "dfs",
+    "docstring": "Depth-First Search (DFS) algorithm is used to traverse or search tree or graph data structures, starting from a given node and exploring as far as possible along each branch before backtracking.",
+    "language": "python",
+    "tags": ["graph", "algorithm", "dfs"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def bfs(graph, start):\n    visited = set()\n    queue = [start]\n    while queue:\n        vertex = queue.pop(0)\n        if vertex not in visited:\n            visited.add(vertex)\n            queue.extend([n for n in graph[vertex] if n not in visited])\n    return visited",
+    "function_name": "bfs",
+    "docstring": "Breadth-First Search (BFS) algorithm is used to traverse or search graph or tree data structures. It explores all neighbors of a vertex before moving on to their neighbors.",
+    "language": "python",
+    "tags": ["graph", "algorithm", "bfs"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def power(x, n):\n    if n == 0:\n        return 1\n    half = power(x, n // 2)\n    if n % 2 == 0:\n        return half * half\n    else:\n        return half * half * x",
+    "function_name": "power",
+    "docstring": "The Power function recursively computes the result of raising a base `x` to the exponent `n`.",
+    "language": "python",
+    "tags": ["math", "algorithm", "power"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def sqrt(x):\n    if x < 0:\n        return None\n    low, high = 0, x\n    while low <= high:\n        mid = (low + high) // 2\n        if mid * mid == x:\n            return mid\n        elif mid * mid < x:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return high",
+    "function_name": "sqrt",
+    "docstring": "This function computes the square root of a number using a binary search approach. Returns None if the input is negative.",
+    "language": "python",
+    "tags": ["math", "algorithm", "square root"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def is_even(n):\n    return n % 2 == 0",
+    "function_name": "is_even",
+    "docstring": "Checks whether a number is even by testing if it's divisible by 2.",
+    "language": "python",
+    "tags": ["math", "basic", "even check"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def max_subarray_sum(arr):\n    max_sum = current_sum = arr[0]\n    for num in arr[1:]:\n        current_sum = max(num, current_sum + num)\n        max_sum = max(max_sum, current_sum)\n    return max_sum",
+    "function_name": "max_subarray_sum",
+    "docstring": "Kadane’s algorithm finds the contiguous subarray with the maximum sum within a one-dimensional numeric array.",
+    "language": "python",
+    "tags": ["array", "algorithm", "max subarray"],
+    "dataset": "array_algorithms"
+  },
+  {
+    "code": "def pascal_triangle(n):\n    result = []\n    for i in range(n):\n        row = [1] * (i + 1)\n        for j in range(1, i):\n            row[j] = result[i - 1][j - 1] + result[i - 1][j]\n        result.append(row)\n    return result",
+    "function_name": "pascal_triangle",
+    "docstring": "Generates Pascal's triangle up to the n-th row. Each number in the triangle is the sum of the two numbers directly above it.",
+    "language": "python",
+    "tags": ["math", "array", "pascal triangle"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def stack_push(stack, value):\n    stack.append(value)\n    return stack",
+    "function_name": "stack_push",
+    "docstring": "Pushes a value onto the stack (implemented as a list in Python).",
+    "language": "python",
+    "tags": ["data structure", "stack", "push"],
+    "dataset": "data_structures"
+  },
+  {
+    "code": "def stack_pop(stack):\n    if not stack:\n        return None\n    return stack.pop()",
+    "function_name": "stack_pop",
+    "docstring": "Pops the top value from the stack. Returns None if the stack is empty.",
+    "language": "python",
+    "tags": ["data structure", "stack", "pop"],
+    "dataset": "data_structures"
+  },
+  {
+    "code": "def queue_enqueue(queue, value):\n    queue.append(value)\n    return queue",
+    "function_name": "queue_enqueue",
+    "docstring": "Enqueues a value into the queue (implemented as a list in Python).",
+    "language": "python",
+    "tags": ["data structure", "queue", "enqueue"],
+    "dataset": "data_structures"
+  },
+  {
+    "code": "def queue_dequeue(queue):\n    if not queue:\n        return None\n    return queue.pop(0)",
+    "function_name": "queue_dequeue",
+    "docstring": "Dequeues the front value from the queue. Returns None if the queue is empty.",
+    "language": "python",
+    "tags": ["data structure", "queue", "dequeue"],
+    "dataset": "data_structures"
+  },
+  {
+    "code": "def binary_to_decimal(binary):\n    return int(binary, 2)",
+    "function_name": "binary_to_decimal",
+    "docstring": "Converts a binary string to its decimal equivalent.",
+    "language": "python",
+    "tags": ["conversion", "binary", "decimal"],
+    "dataset": "conversion_algorithms"
+  },
+  {
+    "code": "def decimal_to_binary(decimal):\n    return bin(decimal).replace('0b', '')",
+    "function_name": "decimal_to_binary",
+    "docstring": "Converts a decimal number to its binary string representation.",
+    "language": "python",
+    "tags": ["conversion", "binary", "decimal"],
+    "dataset": "conversion_algorithms"
+  }
+  {
+    "code": "def factorial_recursive(n):\n    if n == 0 or n == 1:\n        return 1\n    return n * factorial_recursive(n - 1)",
+    "function_name": "factorial_recursive",
+    "docstring": "Computes the factorial of a number recursively.",
+    "language": "python",
+    "tags": ["math", "recursive", "factorial"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def factorial_iterative(n):\n    result = 1\n    for i in range(2, n+1):\n        result *= i\n    return result",
+    "function_name": "factorial_iterative",
+    "docstring": "Computes the factorial of a number iteratively.",
+    "language": "python",
+    "tags": ["math", "iterative", "factorial"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def fibonacci_recursive(n):\n    if n <= 1:\n        return n\n    return fibonacci_recursive(n-1) + fibonacci_recursive(n-2)",
+    "function_name": "fibonacci_recursive",
+    "docstring": "Finds the nth Fibonacci number recursively.",
+    "language": "python",
+    "tags": ["math", "fibonacci", "recursive"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def fibonacci_iterative(n):\n    a, b = 0, 1\n    for i in range(n):\n        a, b = b, a + b\n    return a",
+    "function_name": "fibonacci_iterative",
+    "docstring": "Finds the nth Fibonacci number iteratively.",
+    "language": "python",
+    "tags": ["math", "fibonacci", "iterative"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def nCr(n, r):\n    def factorial(x):\n        if x == 0 or x == 1:\n            return 1\n        return x * factorial(x - 1)\n    return factorial(n) // (factorial(r) * factorial(n - r))",
+    "function_name": "nCr",
+    "docstring": "Calculates the binomial coefficient (n choose r), which is the number of ways to choose r elements from a set of n elements.",
+    "language": "python",
+    "tags": ["combinatorics", "math", "binomial coefficient"],
+    "dataset": "combinatorics_algorithms"
+  },
+  {
+    "code": "def nPr(n, r):\n    def factorial(x):\n        if x == 0 or x == 1:\n            return 1\n        return x * factorial(x - 1)\n    return factorial(n) // factorial(n - r)",
+    "function_name": "nPr",
+    "docstring": "Calculates the permutation of n elements taken r at a time.",
+    "language": "python",
+    "tags": ["combinatorics", "math", "permutations"],
+    "dataset": "combinatorics_algorithms"
+  },
+  {
+    "code": "def gcd_iterative(a, b):\n    while b != 0:\n        a, b = b, a % b\n    return a",
+    "function_name": "gcd_iterative",
+    "docstring": "Finds the greatest common divisor (GCD) of two numbers using the iterative method.",
+    "language": "python",
+    "tags": ["math", "gcd", "iterative"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def gcd_recursive(a, b):\n    if b == 0:\n        return a\n    return gcd_recursive(b, a % b)",
+    "function_name": "gcd_recursive",
+    "docstring": "Finds the greatest common divisor (GCD) of two numbers using recursion.",
+    "language": "python",
+    "tags": ["math", "gcd", "recursive"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def lcm(a, b):\n    def gcd(x, y):\n        while y != 0:\n            x, y = y, x % y\n        return x\n    return abs(a * b) // gcd(a, b)",
+    "function_name": "lcm",
+    "docstring": "Finds the least common multiple (LCM) of two numbers.",
+    "language": "python",
+    "tags": ["math", "lcm", "gcd"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def prime_sieve(n):\n    sieve = [True] * (n + 1)\n    sieve[0] = sieve[1] = False\n    p = 2\n    while p * p <= n:\n        if sieve[p]:\n            for i in range(p * p, n + 1, p):\n                sieve[i] = False\n        p += 1\n    return [p for p in range(n + 1) if sieve[p]]",
+    "function_name": "prime_sieve",
+    "docstring": "Finds all prime numbers up to a given number n using the Sieve of Eratosthenes.",
+    "language": "python",
+    "tags": ["math", "primes", "sieve of eratosthenes"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def hcf_lcm(x, y):\n    def gcd(a, b):\n        while b:\n            a, b = b, a % b\n        return a\n    hcf = gcd(x, y)\n    lcm = abs(x * y) // hcf\n    return hcf, lcm",
+    "function_name": "hcf_lcm",
+    "docstring": "Calculates both the highest common factor (HCF) and least common multiple (LCM) of two numbers.",
+    "language": "python",
+    "tags": ["math", "gcd", "lcm"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def prime_factors(n):\n    factors = []\n    i = 2\n    while i * i <= n:\n        if n % i == 0:\n            factors.append(i)\n            n //= i\n        else:\n            i += 1\n    if n > 1:\n        factors.append(n)\n    return factors",
+    "function_name": "prime_factors",
+    "docstring": "Finds all prime factors of a given number n.",
+    "language": "python",
+    "tags": ["math", "prime factors", "divisibility"],
+    "dataset": "math_algorithms"
+  },
+  {
+    "code": "def trapezoidal_rule(f, a, b, n):\n    h = (b - a) / n\n    s = (f(a) + f(b)) / 2\n    for i in range(1, n):\n        s += f(a + i * h)\n    return s * h",
+    "function_name": "trapezoidal_rule",
+    "docstring": "Uses the trapezoidal rule to estimate the integral of a function f over the interval [a, b] using n subintervals.",
+    "language": "python",
+    "tags": ["calculus", "numerical integration", "trapezoidal rule"],
+    "dataset": "calculus_algorithms"
+  },
+  {
+    "code": "def simpsons_rule(f, a, b, n):\n    h = (b - a) / n\n    s = f(a) + f(b)\n    for i in range(1, n, 2):\n        s += 4 * f(a + i * h)\n    for i in range(2, n - 1, 2):\n        s += 2 * f(a + i * h)\n    return s * h / 3",
+    "function_name": "simpsons_rule",
+    "docstring": "Uses Simpson's rule to estimate the integral of a function f over the interval [a, b] using n subintervals.",
+    "language": "python",
+    "tags": ["calculus", "numerical integration", "simpsons rule"],
+    "dataset": "calculus_algorithms"
+  },
+  {
+    "code": "def binary_to_decimal(binary):\n    return int(binary, 2)",
+    "function_name": "binary_to_decimal",
+    "docstring": "Converts a binary string to its decimal equivalent.",
+    "language": "python",
+    "tags": ["conversion", "binary", "decimal"],
+    "dataset": "conversion_algorithms"
+  },
+  {
+    "code": "def decimal_to_binary(decimal):\n    return bin(decimal).replace('0b', '')",
+    "function_name": "decimal_to_binary",
+    "docstring": "Converts a decimal number to its binary string representation.",
+    "language": "python",
+    "tags": ["conversion", "decimal", "binary"],
+    "dataset": "conversion_algorithms"
+  },
+  {
+    "code": "def to_uppercase(string):\n    return string.upper()",
+    "function_name": "to_uppercase",
+    "docstring": "Converts a string to uppercase.",
+    "language": "python",
+    "tags": ["string manipulation", "conversion", "uppercase"],
+    "dataset": "string_algorithms"
+  },
+  {
+    "code": "def reverse_string(string):\n    return string[::-1]",
+    "function_name": "reverse_string",
+    "docstring": "Reverses the given string.",
+    "language": "python",
+    "tags": ["string manipulation", "reverse", "string"],
+    "dataset": "string_algorithms"
+  },
+  {
+    "code": "def is_palindrome(s):\n    return s == s[::-1]",
+    "function_name": "is_palindrome",
+    "docstring": "Checks if the given string is a palindrome.",
+    "language": "python",
+    "tags": ["string manipulation", "palindrome", "string"],
+    "dataset": "string_algorithms"
+  },
+  {
+    "code": "def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr",
+    "function_name": "bubble_sort",
+    "docstring": "Sorts a list of numbers using the Bubble Sort algorithm.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "bubble sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and key < arr[j]:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr",
+    "function_name": "insertion_sort",
+    "docstring": "Sorts a list of numbers using the Insertion Sort algorithm.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "insertion sort"],
+    "dataset": "sorting_algorithms"
+  }
+  {
+    "code": "def bogo_sort(arr):\n    import random\n    def is_sorted(arr):\n        return all(arr[i] <= arr[i + 1] for i in range(len(arr) - 1))\n    while not is_sorted(arr):\n        random.shuffle(arr)\n    return arr",
+    "function_name": "bogo_sort",
+    "docstring": "Bogo Sort is a highly ineffective sorting algorithm based on the generate and test paradigm.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "bogo sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def cocktail_sort(arr):\n    swapped = True\n    start = 0\n    end = len(arr) - 1\n    while swapped:\n        swapped = False\n        for i in range(start, end):\n            if arr[i] > arr[i + 1]:\n                arr[i], arr[i + 1] = arr[i + 1], arr[i]\n                swapped = True\n        if not swapped:\n            break\n        swapped = False\n        end -= 1\n        for i in range(end, start, -1):\n            if arr[i] < arr[i - 1]:\n                arr[i], arr[i - 1] = arr[i - 1], arr[i]\n                swapped = True\n        start += 1\n    return arr",
+    "function_name": "cocktail_sort",
+    "docstring": "Cocktail Sort is a variation of bubble sort that sorts in both directions on each pass through the list.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "cocktail sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def gnome_sort(arr):\n    index = 0\n    while index < len(arr):\n        if index == 0:\n            index += 1\n        if arr[index] >= arr[index - 1]:\n            index += 1\n        else:\n            arr[index], arr[index - 1] = arr[index - 1], arr[index]\n            index -= 1\n    return arr",
+    "function_name": "gnome_sort",
+    "docstring": "Gnome Sort is a simple sorting algorithm that is similar to insertion sort but more straightforward to implement.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "gnome sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def stooge_sort(arr, l, h):\n    if l >= h:\n        return\n    if arr[l] > arr[h]:\n        arr[l], arr[h] = arr[h], arr[l]\n    if h - l + 1 > 2:\n        t = (h - l + 1) // 3\n        stooge_sort(arr, l, h - t)\n        stooge_sort(arr, l + t, h)\n        stooge_sort(arr, l, h - t)\n    return arr",
+    "function_name": "stooge_sort",
+    "docstring": "Stooge Sort is a recursive sorting algorithm with a time complexity of O(n^(log 3 / log 1.5)).",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "stooge sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def odd_even_sort(arr):\n    n = len(arr)\n    sorted = False\n    while not sorted:\n        sorted = True\n        for i in range(0, n-1, 2):\n            if arr[i] > arr[i + 1]:\n                arr[i], arr[i + 1] = arr[i + 1], arr[i]\n                sorted = False\n        for i in range(1, n-1, 2):\n            if arr[i] > arr[i + 1]:\n                arr[i], arr[i + 1] = arr[i + 1], arr[i]\n                sorted = False\n    return arr",
+    "function_name": "odd_even_sort",
+    "docstring": "Odd-Even Sort is a parallel sorting algorithm that works by repeatedly performing bubble sorts on odd and even indexed pairs.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "odd-even sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def fibonacci_search(arr, x):\n    fib_m2 = 0  # (m-2)'th Fibonacci No.\n    fib_m1 = 1  # (m-1)'th Fibonacci No.\n    fib_m = fib_m2 + fib_m1  # m'th Fibonacci No.\n    while fib_m < len(arr):\n        fib_m2 = fib_m1\n        fib_m1 = fib_m\n        fib_m = fib_m2 + fib_m1\n    offset = -1\n    while fib_m > 1:\n        i = min(offset + fib_m2, len(arr) - 1)\n        if arr[i] < x:\n            fib_m = fib_m1\n            fib_m1 = fib_m2\n            fib_m2 = fib_m - fib_m1\n            offset = i\n        elif arr[i] > x:\n            fib_m = fib_m2\n            fib_m1 -= fib_m1\n            fib_m2 = fib_m - fib_m1\n        else:\n            return i\n    if fib_m1 and arr[offset + 1] == x:\n        return offset + 1\n    return -1",
+    "function_name": "fibonacci_search",
+    "docstring": "Performs Fibonacci search on a sorted array to find the target element.",
+    "language": "python",
+    "tags": ["search", "algorithm", "fibonacci search"],
+    "dataset": "search_algorithms"
+  },
+  {
+    "code": "def jump_search(arr, x):\n    from math import sqrt\n    n = len(arr)\n    step = int(sqrt(n))\n    prev = 0\n    while arr[min(step, n) - 1] < x:\n        prev = step\n        step += int(sqrt(n))\n        if prev >= n:\n            return -1\n    while arr[prev] < x:\n        prev += 1\n        if prev == min(step, n):\n            return -1\n    if arr[prev] == x:\n        return prev\n    return -1",
+    "function_name": "jump_search",
+    "docstring": "Performs jump search on a sorted array to find the target element.",
+    "language": "python",
+    "tags": ["search", "algorithm", "jump search"],
+    "dataset": "search_algorithms"
+  },
+  {
+    "code": "def shell_sort(arr):\n    n = len(arr)\n    gap = n // 2\n    while gap > 0:\n        for i in range(gap, n):\n            temp = arr[i]\n            j = i\n            while j >= gap and arr[j - gap] > temp:\n                arr[j] = arr[j - gap]\n                j -= gap\n            arr[j] = temp\n        gap //= 2\n    return arr",
+    "function_name": "shell_sort",
+    "docstring": "Shell Sort is an in-place comparison sorting algorithm that generalizes insertion sort to allow the exchange of items that are far apart.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "shell sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def radix_sort(arr):\n    max_val = max(arr)\n    exp = 1\n    while max_val // exp > 0:\n        counting_sort_for_radix(arr, exp)\n        exp *= 10\n    return arr\n\ndef counting_sort_for_radix(arr, exp):\n    n = len(arr)\n    output = [0] * n\n    count = [0] * 10\n    for i in range(n):\n        index = arr[i] // exp\n        count[index % 10] += 1\n    for i in range(1, 10):\n        count[i] += count[i - 1]\n    i = n - 1\n    while i >= 0:\n        index = arr[i] // exp\n        output[count[index % 10] - 1] = arr[i]\n        count[index % 10] -= 1\n        i -= 1\n    for i in range(len(arr)):\n        arr[i] = output[i]",
+    "function_name": "radix_sort",
+    "docstring": "Radix Sort is a non-comparative integer sorting algorithm that sorts numbers by processing individual digits.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "radix sort"],
+    "dataset": "sorting_algorithms"
+  }
+  {
+    "code": "def cocktail_shaker_sort(arr):\n    n = len(arr)\n    swapped = True\n    start = 0\n    end = n - 1\n    while swapped:\n        swapped = False\n        for i in range(start, end):\n            if arr[i] > arr[i + 1]:\n                arr[i], arr[i + 1] = arr[i + 1], arr[i]\n                swapped = True\n        if not swapped:\n            break\n        swapped = False\n        end -= 1\n        for i in range(end, start, -1):\n            if arr[i] < arr[i - 1]:\n                arr[i], arr[i - 1] = arr[i - 1], arr[i]\n                swapped = True\n        start += 1\n    return arr",
+    "function_name": "cocktail_shaker_sort",
+    "docstring": "Cocktail Shaker Sort is a bidirectional variation of bubble sort that sorts in both directions.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "cocktail shaker sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def counting_sort_for_range(arr, min_val, max_val):\n    range_of_elements = max_val - min_val + 1\n    count = [0] * range_of_elements\n    output = [0] * len(arr)\n    for num in arr:\n        count[num - min_val] += 1\n    for i in range(1, range_of_elements):\n        count[i] += count[i - 1]\n    for num in reversed(arr):\n        output[count[num - min_val] - 1] = num\n        count[num - min_val] -= 1\n    return output",
+    "function_name": "counting_sort_for_range",
+    "docstring": "Counting Sort for Range works similarly to counting sort but handles a specified range of input values.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "counting sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def bitonic_sort(arr, low, cnt, dir):\n    if cnt > 1:\n        k = cnt // 2\n        bitonic_sort(arr, low, k, 1)\n        bitonic_sort(arr, low + k, k, 0)\n        bitonic_merge(arr, low, cnt, dir)\n\n\ndef bitonic_merge(arr, low, cnt, dir):\n    if cnt > 1:\n        k = cnt // 2\n        for i in range(low, low + k):\n            if (dir == 1 and arr[i] > arr[i + k]) or (dir == 0 and arr[i] < arr[i + k]):\n                arr[i], arr[i + k] = arr[i + k], arr[i]\n        bitonic_merge(arr, low, k, dir)\n        bitonic_merge(arr, low + k, cnt - k, dir)",
+    "function_name": "bitonic_sort",
+    "docstring": "Bitonic Sort is a parallel sorting algorithm that is based on the Bitonic sequence.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "bitonic sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def comb_sort(arr):\n    gap = len(arr)\n    shrink = 1.3\n    sorted = False\n    while not sorted:\n        gap = int(gap / shrink)\n        if gap < 1:\n            gap = 1\n        sorted = True\n        for i in range(len(arr) - gap):\n            if arr[i] > arr[i + gap]:\n                arr[i], arr[i + gap] = arr[i + gap], arr[i]\n                sorted = False\n    return arr",
+    "function_name": "comb_sort",
+    "docstring": "Comb Sort is an improvement over Bubble Sort that eliminates small values near the end of the list.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "comb sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def flash_sort(arr):\n    n = len(arr)\n    max_val = max(arr)\n    min_val = min(arr)\n    m = int(n * 0.43)\n    buckets = [0] * m\n    for num in arr:\n        index = int((num - min_val) * (m - 1) / (max_val - min_val))\n        buckets[index] += 1\n    for i in range(1, m):\n        buckets[i] += buckets[i - 1]\n    output = [0] * n\n    for num in reversed(arr):\n        index = int((num - min_val) * (m - 1) / (max_val - min_val))\n        output[buckets[index] - 1] = num\n        buckets[index] -= 1\n    return output",
+    "function_name": "flash_sort",
+    "docstring": "Flash Sort is a distribution sorting algorithm that is efficient on data that is uniformly distributed.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "flash sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def best_first_search(graph, start, goal):\n    from queue import PriorityQueue\n    queue = PriorityQueue()\n    queue.put((0, start))\n    came_from = {}\n    cost_so_far = {start: 0}\n    while not queue.empty():\n        current = queue.get()[1]\n        if current == goal:\n            break\n        for next in graph[current]:\n            new_cost = cost_so_far[current] + 1  # Assume each step costs 1\n            if next not in cost_so_far or new_cost < cost_so_far[next]:\n                cost_so_far[next] = new_cost\n                priority = new_cost\n                queue.put((priority, next))\n                came_from[next] = current\n    return came_from",
+    "function_name": "best_first_search",
+    "docstring": "Best-First Search algorithm that uses a priority queue to find the optimal path.",
+    "language": "python",
+    "tags": ["graph", "search", "best-first search"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def a_star_search(graph, start, goal):\n    from queue import PriorityQueue\n    open_set = PriorityQueue()\n    open_set.put((0, start))\n    came_from = {}\n    g_score = {start: 0}\n    f_score = {start: heuristic(start, goal)}\n\n    while not open_set.empty():\n        current = open_set.get()[1]\n        if current == goal:\n            return reconstruct_path(came_from, current)\n        for neighbor in graph[current]:\n            tentative_g_score = g_score[current] + 1\n            if neighbor not in g_score or tentative_g_score < g_score[neighbor]:\n                came_from[neighbor] = current\n                g_score[neighbor] = tentative_g_score\n                f_score[neighbor] = tentative_g_score + heuristic(neighbor, goal)\n                open_set.put((f_score[neighbor], neighbor))\n    return []\n\n\ndef heuristic(a, b):\n    return abs(a - b)\n\n\ndef reconstruct_path(came_from, current):\n    total_path = [current]\n    while current in came_from:\n        current = came_from[current]\n        total_path.append(current)\n    return total_path[::-1]",
+    "function_name": "a_star_search",
+    "docstring": "A* Search algorithm that finds the shortest path between start and goal nodes.",
+    "language": "python",
+    "tags": ["graph", "search", "A* search"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def bi_directional_search(graph, start, goal):\n    from collections import deque\n    start_queue = deque([start])\n    goal_queue = deque([goal])\n    start_visited = {start: None}\n    goal_visited = {goal: None}\n    while start_queue and goal_queue:\n        if explore(start_queue, start_visited, goal_visited):\n            return reconstruct_path(start_visited, goal_visited)\n        if explore(goal_queue, goal_visited, start_visited):\n            return reconstruct_path(goal_visited, start_visited)\n    return []\n\n\ndef explore(queue, visited, other_visited):\n    current = queue.popleft()\n    for neighbor in graph[current]:\n        if neighbor not in visited:\n            visited[neighbor] = current\n            queue.append(neighbor)\n            if neighbor in other_visited:\n                return True\n    return False\n\n\ndef reconstruct_path(visited_from_start, visited_from_goal):\n    path = []\n    current = next(iter(visited_from_goal))\n    while current is not None:\n        path.append(current)\n        current = visited_from_goal[current]\n    return path[::-1]",
+    "function_name": "bi_directional_search",
+    "docstring": "Bi-Directional Search algorithm that searches from both start and goal nodes simultaneously.",
+    "language": "python",
+    "tags": ["graph", "search", "bi-directional search"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def interpolation_search(arr, target):\n    low = 0\n    high = len(arr) - 1\n    while low <= high and target >= arr[low] and target <= arr[high]:\n        if low == high:\n            if arr[low] == target:\n                return low\n            return -1\n        pos = low + ((target - arr[low]) * (high - low) // (arr[high] - arr[low]))\n        if arr[pos] == target:\n            return pos\n        if arr[pos] < target:\n            low = pos + 1\n        else:\n            high = pos - 1\n    return -1",
+    "function_name": "interpolation_search",
+    "docstring": "Interpolation Search is an improved variant of binary search for uniformly distributed sorted arrays.",
+    "language": "python",
+    "tags": ["searching", "algorithm", "interpolation search"],
+    "dataset": "searching_algorithms"
+  }
+  {
+    "code": "def shell_sort(arr):\n    n = len(arr)\n    gap = n // 2\n    while gap > 0:\n        for i in range(gap, n):\n            temp = arr[i]\n            j = i\n            while j >= gap and arr[j - gap] > temp:\n                arr[j] = arr[j - gap]\n                j -= gap\n            arr[j] = temp\n        gap //= 2\n    return arr",
+    "function_name": "shell_sort",
+    "docstring": "Shell Sort is an in-place comparison sorting algorithm that generalizes insertion sort to allow the exchange of items that are far apart.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "shell sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def selection_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        min_idx = i\n        for j in range(i + 1, n):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr",
+    "function_name": "selection_sort",
+    "docstring": "Selection Sort is a simple comparison-based sorting algorithm that divides the input list into two parts: a sorted part and an unsorted part.",
+    "language": "python",
+    "tags": ["sorting", "algorithm", "selection sort"],
+    "dataset": "sorting_algorithms"
+  },
+  {
+    "code": "def dijkstra(graph, start):\n    import heapq\n    queue = [(0, start)]\n    distances = {vertex: float('infinity') for vertex in graph}\n    distances[start] = 0\n    while queue:\n        current_distance, current_vertex = heapq.heappop(queue)\n        if current_distance > distances[current_vertex]:\n            continue\n        for neighbor, weight in graph[current_vertex].items():\n            distance = current_distance + weight\n            if distance < distances[neighbor]:\n                distances[neighbor] = distance\n                heapq.heappush(queue, (distance, neighbor))\n    return distances",
+    "function_name": "dijkstra",
+    "docstring": "Dijkstra's algorithm finds the shortest path from a start node to all other nodes in a weighted graph.",
+    "language": "python",
+    "tags": ["graph", "shortest path", "dijkstra"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def bellman_ford(graph, start):\n    distances = {vertex: float('infinity') for vertex in graph}\n    distances[start] = 0\n    for _ in range(len(graph) - 1):\n        for vertex in graph:\n            for neighbor, weight in graph[vertex].items():\n                if distances[vertex] + weight < distances[neighbor]:\n                    distances[neighbor] = distances[vertex] + weight\n    return distances",
+    "function_name": "bellman_ford",
+    "docstring": "The Bellman-Ford algorithm computes the shortest paths from a single source vertex to all vertices in a weighted graph.",
+    "language": "python",
+    "tags": ["graph", "shortest path", "bellman-ford"],
+    "dataset": "graph_algorithms"
+  },
+  {
+    "code": "def knuth_morris_pratt(pattern, text):\n    m = len(pattern)\n    n = len(text)\n    lps = [0] * m\n    j = 0  # index for pattern\n    compute_lps(pattern, m, lps)\n    i = 0  # index for text\n    while i < n:\n        if pattern[j] == text[i]:\n            i += 1\n            j += 1\n        if j == m:\n            print(f'Found pattern at index {i - j}')\n            j = lps[j - 1]\n        elif i < n and pattern[j] != text[i]:\n            if j != 0:\n                j = lps[j - 1]\n            else:\n                i += 1\n\n\ndef compute_lps(pattern, m, lps):\n    length = 0\n    i = 1\n    lps[0] = 0\n    while i < m:\n        if pattern[i] == pattern[length]:\n            length += 1\n            lps[i] = length\n            i += 1\n        else:\n            if length != 0:\n                length = lps[length - 1]\n            else:\n                lps[i] = 0\n                i += 1",
+    "function_name": "knuth_morris_pratt",
+    "docstring": "Knuth-Morris-Pratt algorithm is an efficient string-searching algorithm that finds occurrences of a word within a main text string.",
+    "language": "python",
+    "tags": ["searching", "algorithm", "KMP"],
+    "dataset": "searching_algorithms"
+  },
+  {
+    "code": "def count_occurrences(arr, x):\n    def binary_search(arr, low, high, x):\n        if high >= low:\n            mid = low + (high - low) // 2\n            if arr[mid] == x:\n                return mid\n            elif arr[mid] > x:\n                return binary_search(arr, low, mid - 1, x)\n            else:\n                return binary_search(arr, mid + 1, high, x)\n        return -1\n\n    n = len(arr)\n    index = binary_search(arr, 0, n - 1, x)\n    if index == -1:\n        return 0\n    count = 1\n    left = index - 1\n    while left >= 0 and arr[left] == x:\n        count += 1\n        left -= 1\n    right = index + 1\n    while right < n and arr[right] == x:\n        count += 1\n        right += 1\n    return count",
+    "function_name": "count_occurrences",
+    "docstring": "Count occurrences of an element in a sorted array using binary search.",
+    "language": "python",
+    "tags": ["searching", "algorithm", "count occurrences"],
+    "dataset": "searching_algorithms"
+  },
+  {
+    "code": "def quickselect(arr, k):\n    if len(arr) == 1:\n        return arr[0]\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    if k < len(left):\n        return quickselect(left, k)\n    elif k < len(left) + len(middle):\n        return middle[0]\n    else:\n        return quickselect(right, k - len(left) - len(middle))",
+    "function_name": "quickselect",
+    "docstring": "Quickselect is an algorithm to find the k-th smallest element in an unordered list.",
+    "language": "python",
+    "tags": ["searching", "algorithm", "quickselect"],
+    "dataset": "searching_algorithms"
+  },
+  {
+    "code": "def generate_parentheses(n):\n    def backtrack(partial, left, right):\n        if len(partial) == 2 * n:\n            result.append(partial)\n            return\n        if left < n:\n            backtrack(partial + '(', left + 1, right)\n        if right < left:\n            backtrack(partial + ')', left, right + 1)\n\n    result = []\n    backtrack('', 0, 0)\n    return result",
+    "function_name": "generate_parentheses",
+    "docstring": "Generate all combinations of n pairs of parentheses.",
+    "language": "python",
+    "tags": ["combinatorics", "algorithm", "parentheses generation"],
+    "dataset": "combinatorial_algorithms"
+  },
+  {
+    "code": "def n_queens(n):\n    def solve(board, col):\n        if col >= n:\n            result.append([''.join(row) for row in board])\n            return\n        for i in range(n):\n            if is_safe(board, i, col):\n                board[i][col] = 'Q'\n                solve(board, col + 1)\n                board[i][col] = '.'\n\n    def is_safe(board, row, col):\n        for i in range(col):\n            if board[row][i] == 'Q':\n                return False\n        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):\n            if board[i][j] == 'Q':\n                return False\n        for i, j in zip(range(row, n), range(col, -1, -1)):\n            if board[i][j] == 'Q':\n                return False\n        return True\n\n    result = []\n    board = [['.' for _ in range(n)] for _ in range(n)]\n    solve(board, 0)\n    return result",
+    "function_name": "n_queens",
+    "docstring": "The N-Queens problem is the challenge of placing N chess queens on an N×N chessboard so that no two queens threaten each other.",
+    "language": "python",
+    "tags": ["combinatorics", "algorithm", "n-queens"],
+    "dataset": "combinatorial_algorithms"
+  }
+]

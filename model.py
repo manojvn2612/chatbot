@@ -4,40 +4,24 @@ from torch.nn import functional as F
 import math
 import torch.optim as optim
 import json
+import re
 
 torch.manual_seed(2612)
 
+# Define the Embedder class
 class Embedder(nn.Module):
     def __init__(self, vocab_size, embedding_dim=512):
         super(Embedder, self).__init__()
-        self.embeddings = nn.Embedding(vocab_size, embedding_dim)  # Initialize the embedding layer
+        self.embeddings = nn.Embedding(vocab_size, embedding_dim)
 
     def forward(self, x):
         return self.embeddings(x)
 
-# class Positional(nn.Module):
-#     def __init__(self, embedding_dim, max_seq_len):
-#         super(Positional, self).__init__()
-#         self.embedding_dim = embedding_dim
-#         pe = torch.zeros(max_seq_len, embedding_dim)
-#         for pos in range(max_seq_len):
-#             for i in range(0, embedding_dim, 2):
-#                 pe[pos, i] = math.sin(pos / (10000 ** ((2 * i)/embedding_dim)))
-#                 pe[pos, i + 1] = math.cos(pos / (10000 ** ((2 * i)/embedding_dim)))
-#         pe = pe.unsqueeze(0)  # Add a batch dimension
-#         self.register_buffer('pe', pe)
-
-#     def forward(self, x):
-#         x = x * math.sqrt(self.embedding_dim)  # Scale the input
-#         seq_len = x.size(1)
-#         x = x + torch.autograd.Variable(self.pe[:, :seq_len], requires_grad=False)
-#         return x
-
+# Define the Positional Encoding class
 class Positional(nn.Module):
     def __init__(self, embedding_dim, max_seq_len):
         super(Positional, self).__init__()
         self.embedding_dim = embedding_dim
-        # Adjust max_seq_len to the length of input tokens
         pe = torch.zeros(max_seq_len, embedding_dim)
         for pos in range(max_seq_len):
             for i in range(0, embedding_dim, 2):
@@ -47,13 +31,17 @@ class Positional(nn.Module):
         self.register_buffer('pe', pe)
 
     def forward(self, x):
-        # Scale the input
-        x = x * math.sqrt(self.embedding_dim)  
-        # Make sure that the positional encoding matches the input size
+        x = x * math.sqrt(self.embedding_dim)
         seq_len = x.size(1)
         x = x + self.pe[:, :seq_len]
         return x
 
+# Custom tokenizer to better handle Python code
+def custom_tokenizer(code):
+    tokens = re.findall(r'\w+|[^\w\s]', code, re.UNICODE)
+    return tokens
+
+# Define the Layer Normalization class
 class LayerNormalization(nn.Module):
     def __init__(self, parameters, epsilon: float = 1e-6):
         super(LayerNormalization, self).__init__()
@@ -66,6 +54,7 @@ class LayerNormalization(nn.Module):
         std = x.std(-1, keepdim=True)
         return self.alpha * (x - mean) / (std + self.epsilon) + self.beta
 
+# Define the Multihead Attention class
 class Multihead(nn.Module):
     def __init__(self, d_model, nhead=8):
         super().__init__()
@@ -88,85 +77,140 @@ class Multihead(nn.Module):
         output = scores.permute(1, 2, 0, 3).contiguous().view(batch_size, seq_len, d_model)
         return self.out(output)
 
+# Padding sequences dynamically
+def pad_sequences(sequences, pad_value=0):
+    max_len = max(len(seq) for seq in sequences)
+    return [seq + [pad_value] * (max_len - len(seq)) for seq in sequences]
+
+# Create a causal mask for attention
+def create_causal_mask(seq_len):
+    mask = torch.tril(torch.ones(seq_len, seq_len))
+    mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
+    return mask
+
 if __name__ == "__main__":
-    epochs = 100
+    epochs = 10  # Increase number of epochs
     learning_rate = 0.00001
 
-    #parameters to adjust my model parameters
-    vocab_size = 1000
-    embedding_dim = 1024
-    sequence_length = 150
-    batch_size = 2
-
-    '''# Example input and target sequences
-    input_tokens = torch.LongTensor([[1, 2, 3, 4], [5, 6, 7, 8]])
-    target_tokens = torch.LongTensor([[2, 3, 4, 0], [6, 7, 8, 0]])
-
-    # Check if token values are out of range trial
-
-    assert input_tokens.max().item() < vocab_size, "Input tokens contain values out of vocabulary range!"
-    assert target_tokens.max().item() < vocab_size, "Target tokens contain values out of vocabulary range!"
-'''
-
-    with open('D:\Manoj\Projects\Python\encoded_dataset.json', 'r') as f:
+    # Load the data (use your dataset path)
+    with open(r'D:\Manoj\Projects\Python\natural_lang\data[1].json', 'r') as f:
         data = json.load(f)
+
+    # Tokenize and map the data
+    encoded_tokens = set()
     for entry in data:
-        input_tokens = torch.LongTensor(entry['label_encoded_tokens'][:-1])  # Input tokens (all except last token)
-        target_tokens = torch.LongTensor(entry['label_encoded_tokens'][1:])  # Target tokens (all except first token)
+        code = entry.get('code', '')
+        for token in custom_tokenizer(code):
+            encoded_tokens.add(token)
+    encoded_tokens = sorted(encoded_tokens)
 
-        input_tokens = input_tokens.unsqueeze(0)
-        target_tokens = target_tokens.unsqueeze(0)
+    # Create mappings
+    token_map = {token: idx for idx, token in enumerate(encoded_tokens)}
+    index_to_token = {idx: token for token, idx in token_map.items()}
 
-        # Check if token values are out of range
-        assert input_tokens.max().item() < vocab_size, "Input tokens contain values out of vocabulary range!"
-        assert target_tokens.max().item() < vocab_size,"Target tokens contain values out of vocabulary range!"
+    # Dynamic vocab size
+    vocab_size = len(token_map)
 
-    # Define the model components
-    embedder = Embedder(vocab_size, embedding_dim)  # Embedder: vocab_size = 10, embedding_dim = 8
-    positional_encoding = Positional(embedding_dim, max_seq_len=sequence_length)
-    multihead = Multihead(embedding_dim)  # Multihead Attention: d_model = 8
-    linear_layer = nn.Linear(embedding_dim, vocab_size)
-    
-    criterion = nn.CrossEntropyLoss()  # Loss function (cross-entropy)
-    optimizer = optim.Adam(list(embedder.parameters()) + list(multihead.parameters()) + list(linear_layer.parameters()), lr=learning_rate)  # Optimizer
+    input_sequences = []
+    target_sequences = []
+    for entry in data:
+        code_tokens = custom_tokenizer(entry.get('code', ''))
+        input_tokens = [token_map[token] for token in code_tokens[:-1] if token in token_map]
+        target_tokens = [token_map[token] for token in code_tokens[1:] if token in token_map]
+        input_sequences.append(input_tokens)
+        target_sequences.append(target_tokens)
 
-    # Create an attention mask (causal mask for future tokens)
-    size_tokens = input_tokens.size(1)
-    mask = torch.tril(torch.ones(size_tokens, size_tokens))  # Lower-triangular causal mask
-    mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
-    input_tokens = torch.LongTensor(entry['label_encoded_tokens'][:-1])  # Input tokens (all except last token)
-    target_tokens = torch.LongTensor(entry['label_encoded_tokens'][1:])  # Target tokens (all except first token)
+    # Padding dynamically
+    input_sequences = pad_sequences(input_sequences)
+    target_sequences = pad_sequences(target_sequences)
 
-    # Add batch dimension by unsqueezing
+    input_sequences = torch.LongTensor(input_sequences)
+    target_sequences = torch.LongTensor(target_sequences)
 
-    # Training loop
+    # Define model components
+    embedder = Embedder(vocab_size, embedding_dim=1024)
+    positional_encoding = Positional(1024, max_seq_len=input_sequences.size(1))
+    multihead = Multihead(1024, nhead=8)
+    linear_layer = nn.Linear(1024, vocab_size)
+
+    # Loss function and optimizer
+    criterion = nn.CrossEntropyLoss(ignore_index=0)
+    optimizer = optim.Adam(list(embedder.parameters()) + list(multihead.parameters()) + list(linear_layer.parameters()), lr=learning_rate)
+
+    # Causal mask creation
+    mask = create_causal_mask(input_sequences.size(1))
+
+    # Training loop with validation
     for epoch in range(epochs):
-        # Forward pass
         optimizer.zero_grad()
-        
-        emb_output = embedder(input_tokens)  # Get embedding for input tokens
-        embed_output = positional_encoding(emb_output)  # Apply positional encoding
-        multihead_output = multihead(embed_output, mask=mask)  # Apply multihead attention
-        
-        # Pass through the linear layer
+
+        # Forward pass
+        emb_output = embedder(input_sequences)
+        embed_output = positional_encoding(emb_output)
+        multihead_output = multihead(embed_output, mask=mask)
+
         logits = linear_layer(multihead_output)
-        
-        # Reshape output to be suitable for the loss function (batch * seq_len, vocab_size)
         output = logits.view(-1, vocab_size)
-        
-        # Compute loss (output and target should be flattened for CrossEntropyLoss)
-        loss = criterion(output, target_tokens.view(-1))
-        
+        loss = criterion(output, target_sequences.view(-1))
+
         # Backpropagation
         loss.backward()
         optimizer.step()
-        
-        # Get the predicted next word
-        predicted_tokens = torch.argmax(logits, dim=-1)  # Get predicted tokens
-        
-        # Print the loss for each epoch
+
         print(f'Epoch {epoch+1}/{epochs}, Loss: {loss.item()}')
-        
-        # Print the predicted tokens for each batch
-        print("Predicted tokens:")
-        print(predicted_tokens)
+
+    # Decoding with clamping
+    predicted_tokens = torch.argmax(logits, dim=-1)
+    predicted_tokens = torch.clamp(predicted_tokens, min=0, max=vocab_size-1)
+
+    # Decoding into readable code
+    for pred_seq in predicted_tokens:
+        decoded_tokens = [index_to_token[idx.item()] for idx in pred_seq if idx.item() != 0]
+        decoded_code = ''.join(decoded_tokens)
+        print("Decoded Code:\n", decoded_code)
+    # Example of testing the model with specific tokens
+    test_code = "def bubble_sort(arr):"  # Example code to test
+    test_tokens = custom_tokenizer(test_code)
+    test_input = [token_map[token] for token in test_tokens if token in token_map]
+
+    # Pad test input
+    test_input = pad_sequences([test_input])
+    test_input_tensor = torch.LongTensor(test_input)
+
+    # Forward pass
+    with torch.no_grad():
+        test_emb_output = embedder(test_input_tensor)
+        test_pos_output = positional_encoding(test_emb_output)
+        test_multihead_output = multihead(test_pos_output, mask=create_causal_mask(test_input_tensor.size(1)))
+        test_logits = linear_layer(test_multihead_output)
+
+    # Get predicted tokens
+    predicted_tokens = torch.argmax(test_logits, dim=-1)
+
+    # Decode the output
+    # Improved decoding with additional checks
+    decoded_tokens = []
+    for pred_seq in predicted_tokens:
+        valid_tokens = [idx.item() for idx in pred_seq if idx.item() not in [0]]  # Filter out padding
+        decoded_code = ''.join(index_to_token[idx] for idx in valid_tokens)
+        decoded_tokens.append(decoded_code)
+
+    # Print decoded code snippets
+    for code in decoded_tokens:
+        print("Decoded Code:\n", code)
+    # Print parameters of each component
+    print("Embedder parameters:")
+    for param in embedder.parameters():
+        print(param)
+
+    print("\nPositional Encoding parameters:")
+    for param in positional_encoding.parameters():
+        print(param)
+
+    print("\nMultihead Attention parameters:")
+    for param in multihead.parameters():
+        print(param)
+
+    print("\nLinear layer parameters:")
+    for param in linear_layer.parameters():
+        print(param)
