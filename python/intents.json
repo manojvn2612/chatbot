@@ -1,0 +1,177 @@
+{
+    "intents": [
+        {
+            "tag": "bubble sort",
+            "patterns": [
+                "Write a function for bubble sort",
+                "Def Bubble sort",
+                "Can you show me bubble sort in Python?",
+                "Explain bubble sort with code",
+                "Give me a bubble sort implementation"
+            ],
+            "responses": [
+                "Here's a simple bubble sort implementation:\n```python\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    return arr```",
+                "Check out this optimized bubble sort:\n```python\ndef optimized_bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n                swapped = True\n        if not swapped:\n            break\n    return arr```",
+                "Here’s a recursive bubble sort implementation:\n```python\ndef recursive_bubble_sort(arr, n=None):\n    if n is None:\n        n = len(arr)\n    if n == 1:\n        return arr\n    for i in range(n-1):\n        if arr[i] > arr[i+1]:\n            arr[i], arr[i+1] = arr[i+1], arr[i]\n    return recursive_bubble_sort(arr, n-1)```",
+                "This version uses a sentinel to optimize:\n```python\ndef bubble_sort_with_sentinel(arr):\n    n = len(arr)\n    arr.append(float('inf'))  # sentinel\n    for i in range(n):\n        for j in range(0, n-i):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n    arr.pop()  # remove sentinel\n    return arr```"
+            ]
+        },
+        {
+            "tag": "insertion sort",
+            "patterns": [
+                "Can you provide an insertion sort function?",
+                "Show me how to code insertion sort",
+                "Def Insertion sort",
+                "Explain insertion sort with code",
+                "How does insertion sort work in Python?"
+            ],
+            "responses": [
+                "Here is a basic insertion sort implementation:\n```python\ndef insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and key < arr[j]:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr```",
+                "Here’s a more complex version of insertion sort that includes handling duplicates:\n```python\ndef insertion_sort_with_duplicates(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and key < arr[j]:\n            arr[j + 1] = arr[j]\n            j -= 1\n        arr[j + 1] = key\n    return arr```",
+                "This insertion sort keeps track of the number of shifts:\n```python\ndef insertion_sort_with_shifts(arr):\n    shifts = 0\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and key < arr[j]:\n            arr[j + 1] = arr[j]\n            j -= 1\n            shifts += 1\n        arr[j + 1] = key\n    return arr, shifts```",
+                "Here’s a recursive version of insertion sort:\n```python\ndef recursive_insertion_sort(arr, n=None):\n    if n is None:\n        n = len(arr)\n    if n <= 1:\n        return arr\n    recursive_insertion_sort(arr, n-1)\n    key = arr[n-1]\n    j = n - 2\n    while j >= 0 and arr[j] > key:\n        arr[j + 1] = arr[j]\n        j -= 1\n    arr[j + 1] = key\n    return arr```"
+            ]
+        },
+        {
+            "tag": "selection sort",
+            "patterns": [
+                "Write a function for selection sort",
+                "How do I implement selection sort?",
+                "Def Selection sort",
+                "Explain selection sort with code",
+                "Can you show me a Python version of selection sort?"
+            ],
+            "responses": [
+                "Here's a straightforward selection sort implementation:\n```python\ndef selection_sort(arr):\n    for i in range(len(arr)):\n        min_idx = i\n        for j in range(i+1, len(arr)):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr```",
+                "This is a selection sort that tracks swaps:\n```python\ndef selection_sort_with_swaps(arr):\n    swap_count = 0\n    for i in range(len(arr)):\n        min_idx = i\n        for j in range(i + 1, len(arr)):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        if min_idx != i:\n            arr[i], arr[min_idx] = arr[min_idx], arr[i]\n            swap_count += 1\n    return arr, swap_count```",
+                "Here’s a recursive version of selection sort:\n```python\ndef recursive_selection_sort(arr, n=None):\n    if n is None:\n        n = len(arr)\n    if n <= 1:\n        return arr\n    min_idx = 0\n    for i in range(1, n):\n        if arr[i] < arr[min_idx]:\n            min_idx = i\n    arr[min_idx], arr[0] = arr[0], arr[min_idx]\n    return [arr[0]] + recursive_selection_sort(arr[1:], n-1)```",
+                "Here’s a selection sort that sorts in descending order:\n```python\ndef selection_sort_desc(arr):\n    for i in range(len(arr)):\n        max_idx = i\n        for j in range(i + 1, len(arr)):\n            if arr[j] > arr[max_idx]:\n                max_idx = j\n        arr[i], arr[max_idx] = arr[max_idx], arr[i]\n    return arr```"
+            ]
+        },
+        {
+            "tag": "merge sort",
+            "patterns": [
+                "How do I implement merge sort in Python?",
+                "Can you show me a merge sort function?",
+                "Explain merge sort with code",
+                "Def Merge sort",
+                "Write a merge sort function"
+            ],
+            "responses": [
+                "Here’s a standard implementation of merge sort:\n```python\ndef merge_sort(arr):\n    if len(arr) > 1:\n        mid = len(arr) // 2\n        L = arr[:mid]\n        R = arr[mid:]\n\n        merge_sort(L)\n        merge_sort(R)\n\n        i = j = k = 0\n\n        while i < len(L) and j < len(R):\n            if L[i] < R[j]:\n                arr[k] = L[i]\n                i += 1\n            else:\n                arr[k] = R[j]\n                j += 1\n            k += 1\n\n        while i < len(L):\n            arr[k] = L[i]\n            i += 1\n            k += 1\n\n        while j < len(R):\n            arr[k] = R[j]\n            j += 1\n            k += 1\n    return arr```",
+                "Here’s a merge sort that visualizes the process:\n```python\ndef merge_sort_visual(arr, level=0):\n    if len(arr) > 1:\n        mid = len(arr) // 2\n        L = arr[:mid]\n        R = arr[mid:]\n        merge_sort_visual(L, level + 1)\n        merge_sort_visual(R, level + 1)\n        print('Level', level, 'merging', L, R)\n        i = j = k = 0\n        while i < len(L) and j < len(R):\n            if L[i] < R[j]:\n                arr[k] = L[i]\n                i += 1\n            else:\n                arr[k] = R[j]\n                j += 1\n            k += 1\n        while i < len(L):\n            arr[k] = L[i]\n            i += 1\n            k += 1\n        while j < len(R):\n            arr[k] = R[j]\n            j += 1\n            k += 1\n    return arr```",
+                "This version of merge sort counts inversions:\n```python\ndef merge_and_count(arr, temp_arr, left, mid, right):\n    i = left    # Starting index for left subarray\n    j = mid + 1 # Starting index for right subarray\n    k = left    # Starting index to be sorted\n    inv_count = 0\n\n    while i <= mid and j <= right:\n        if arr[i] <= arr[j]:\n            temp_arr[k] = arr[i]\n            i += 1\n        else:\n            temp_arr[k] = arr[j]\n            inv_count += (mid - i + 1)\n            j += 1\n        k += 1\n\n    while i <= mid:\n        temp_arr[k] = arr[i]\n        i += 1\n        k += 1\n\n    while j <= right:\n        temp_arr[k] = arr[j]\n        j += 1\n        k += 1\n\n    for i in range(left, right + 1):\n        arr[i] = temp_arr[i]\n\n    return inv_count\n\ndef merge_sort_and_count(arr, temp_arr, left, right):\n    inv_count = 0\n    if left < right:\n        mid = (left + right) // 2\n        inv_count += merge_sort_and_count(arr, temp_arr, left, mid)\n        inv_count += merge_sort_and_count(arr, temp_arr, mid + 1, right)\n        inv_count += merge_and_count(arr, temp_arr, left, mid, right)\n    return inv_count\n```",
+                "Here’s a bottom-up merge sort:\n```python\ndef bottom_up_merge_sort(arr):\n    n = len(arr)\n    size = 1\n    while size < n:\n        left = 0\n        while left < n - size:\n            mid = left + size - 1\n            right = min(left + 2*size - 1, n - 1)\n            merge(arr, left, mid, right)\n            left += 2 * size\n        size *= 2\n    return arr\n\ndef merge(arr, left, mid, right):\n    n1 = mid - left + 1\n    n2 = right - mid\n    L = arr[left:mid + 1]\n    R = arr[mid + 1:right + 1]\n    i = j = 0\n    k = left\n    while i < n1 and j < n2:\n        if L[i] <= R[j]:\n            arr[k] = L[i]\n            i += 1\n        else:\n            arr[k] = R[j]\n            j += 1\n        k += 1\n    while i < n1:\n        arr[k] = L[i]\n        i += 1\n        k += 1\n    while j < n2:\n        arr[k] = R[j]\n        j += 1\n        k += 1\n```"
+            ]
+        },
+        {
+            "tag": "quick sort",
+            "patterns": [
+                "Can you show me how to implement quick sort?",
+                "Write a quick sort function",
+                "Def Quick sort",
+                "Explain quick sort with code",
+                "How does quick sort work in Python?"
+            ],
+            "responses": [
+                "Here’s a basic implementation of quick sort:\n```python\ndef quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr) // 2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quick_sort(left) + middle + quick_sort(right)```",
+                "This is a quick sort with a median-of-three pivot selection:\n```python\ndef quick_sort_median(arr):\n    if len(arr) <= 1:\n        return arr\n    else:\n        mid = len(arr) // 2\n        pivot = sorted([arr[0], arr[mid], arr[-1]])[1]\n        left = [x for x in arr if x < pivot]\n        middle = [x for x in arr if x == pivot]\n        right = [x for x in arr if x > pivot]\n        return quick_sort_median(left) + middle + quick_sort_median(right)```",
+                "Here’s a quick sort that counts the number of comparisons:\n```python\ndef quick_sort_count_comparisons(arr):\n    comparisons = 0\n    def quick_sort_inner(arr):\n        nonlocal comparisons\n        if len(arr) <= 1:\n            return arr\n        pivot = arr[len(arr) // 2]\n        left = [x for x in arr if x < pivot]\n        middle = [x for x in arr if x == pivot]\n        right = [x for x in arr if x > pivot]\n        comparisons += len(left) + len(right)\n        return quick_sort_inner(left) + middle + quick_sort_inner(right)\n    return quick_sort_inner(arr), comparisons\n```",
+                "Here’s a randomized version of quick sort:\n```python\ndef randomized_quick_sort(arr):\n    import random\n    if len(arr) <= 1:\n        return arr\n    pivot_index = random.randint(0, len(arr) - 1)\n    pivot = arr[pivot_index]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return randomized_quick_sort(left) + middle + randomized_quick_sort(right)```"
+            ]
+        },
+        {
+            "tag": "heap sort",
+            "patterns": [
+                "Write a function for heap sort",
+                "How to implement heap sort in Python?",
+                "Explain heap sort with code",
+                "Def Heap sort",
+                "Can you show me a heap sort function?"
+            ],
+            "responses": [
+                "Here's a standard heap sort implementation:\n```python\ndef heapify(arr, n, i):\n    largest = i\n    left = 2 * i + 1\n    right = 2 * i + 2\n    if left < n and arr[left] > arr[largest]:\n        largest = left\n    if right < n and arr[right] > arr[largest]:\n        largest = right\n    if largest != i:\n        arr[i], arr[largest] = arr[largest], arr[i]\n        heapify(arr, n, largest)\n\ndef heap_sort(arr):\n    n = len(arr)\n    for i in range(n // 2 - 1, -1, -1):\n        heapify(arr, n, i)\n    for i in range(n-1, 0, -1):\n        arr[i], arr[0] = arr[0], arr[i]\n        heapify(arr, i, 0)\n    return arr```",
+                "Here’s a heap sort that counts comparisons:\n```python\ndef heapify_count(arr, n, i, count):\n    largest = i\n    left = 2 * i + 1\n    right = 2 * i + 2\n    if left < n:\n        count[0] += 1\n        if arr[left] > arr[largest]:\n            largest = left\n    if right < n:\n        count[0] += 1\n        if arr[right] > arr[largest]:\n            largest = right\n    if largest != i:\n        arr[i], arr[largest] = arr[largest], arr[i]\n        heapify_count(arr, n, largest, count)\n\ndef heap_sort_with_count(arr):\n    n = len(arr)\n    count = [0]\n    for i in range(n // 2 - 1, -1, -1):\n        heapify_count(arr, n, i, count)\n    for i in range(n-1, 0, -1):\n        arr[i], arr[0] = arr[0], arr[i]\n        heapify_count(arr, i, 0, count)\n    return arr, count[0]```",
+                "Here’s a heap sort that implements a max-heap:\n```python\ndef build_max_heap(arr):\n    n = len(arr)\n    for i in range(n // 2 - 1, -1, -1):\n        heapify(arr, n, i)\n\ndef heap_sort_max(arr):\n    build_max_heap(arr)\n    for i in range(len(arr) - 1, 0, -1):\n        arr[0], arr[i] = arr[i], arr[0]\n        heapify(arr, i, 0)\n    return arr```",
+                "Here’s a recursive version of heap sort:\n```python\ndef heap_sort_recursive(arr):\n    def heapify(arr, n, i):\n        largest = i\n        left = 2 * i + 1\n        right = 2 * i + 2\n        if left < n and arr[left] > arr[largest]:\n            largest = left\n        if right < n and arr[right] > arr[largest]:\n            largest = right\n        if largest != i:\n            arr[i], arr[largest] = arr[largest], arr[i]\n            heapify(arr, n, largest)\n    n = len(arr)\n    for i in range(n // 2 - 1, -1, -1):\n        heapify(arr, n, i)\n    for i in range(n-1, 0, -1):\n        arr[0], arr[i] = arr[i], arr[0]\n        heapify(arr, i, 0)\n    return arr\n```"
+            ]
+        },
+        {
+            "tag": "selection sort",
+            "patterns": [
+                "Can you show me how to implement selection sort?",
+                "Write a selection sort function",
+                "Explain selection sort with code",
+                "How does selection sort work in Python?",
+                "Def Selection sort"
+            ],
+            "responses": [
+                "Here’s a basic implementation of selection sort:\n```python\ndef selection_sort(arr):\n    for i in range(len(arr)):\n        min_idx = i\n        for j in range(i + 1, len(arr)):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr```",
+                "This version of selection sort finds the largest element:\n```python\ndef selection_sort_desc(arr):\n    for i in range(len(arr)):\n        max_idx = i\n        for j in range(i + 1, len(arr)):\n            if arr[j] > arr[max_idx]:\n                max_idx = j\n        arr[i], arr[max_idx] = arr[max_idx], arr[i]\n    return arr```",
+                "Here’s a selection sort that sorts only even-indexed elements:\n```python\ndef selection_sort_even(arr):\n    for i in range(0, len(arr), 2):\n        min_idx = i\n        for j in range(i + 2, len(arr), 2):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr```",
+                "This implementation of selection sort uses a helper function:\n```python\ndef find_min_index(arr, start):\n    min_idx = start\n    for j in range(start + 1, len(arr)):\n        if arr[j] < arr[min_idx]:\n            min_idx = j\n    return min_idx\n\ndef selection_sort(arr):\n    for i in range(len(arr)):\n        min_idx = find_min_index(arr, i)\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr```"
+            ]
+        },
+        {
+            "tag": "counting sort",
+            "patterns": [
+                "Can you show me how to implement counting sort?",
+                "Write a counting sort function",
+                "Explain counting sort with code",
+                "Def Counting sort",
+                "How does counting sort work in Python?"
+            ],
+            "responses": [
+                "Here’s a basic implementation of counting sort:\n```python\ndef counting_sort(arr):\n    max_val = max(arr)\n    count = [0] * (max_val + 1)\n    output = [0] * len(arr)\n\n    for num in arr:\n        count[num] += 1\n\n    for i in range(1, len(count)):\n        count[i] += count[i - 1]\n\n    for i in range(len(arr) - 1, -1, -1):\n        output[count[arr[i]] - 1] = arr[i]\n        count[arr[i]] -= 1\n\n    return output\n```",
+                "This version handles negative numbers:\n```python\ndef counting_sort_with_negatives(arr):\n    min_val = min(arr)\n    max_val = max(arr)\n    range_of_elements = max_val - min_val + 1\n    count = [0] * range_of_elements\n    output = [0] * len(arr)\n\n    for num in arr:\n        count[num - min_val] += 1\n\n    for i in range(1, len(count)):\n        count[i] += count[i - 1]\n\n    for i in range(len(arr) - 1, -1, -1):\n        output[count[arr[i] - min_val] - 1] = arr[i]\n        count[arr[i] - min_val] -= 1\n\n    return output\n```",
+                "Here’s a stable counting sort:\n```python\ndef stable_counting_sort(arr):\n    max_val = max(arr)\n    count = [0] * (max_val + 1)\n    output = [0] * len(arr)\n\n    for num in arr:\n        count[num] += 1\n\n    for i in range(len(count)):\n        count[i] += count[i - 1] if i > 0 else 0\n\n    for i in range(len(arr) - 1, -1, -1):\n        output[count[arr[i]] - 1] = arr[i]\n        count[arr[i]] -= 1\n\n    return output\n```",
+                "This counting sort implementation uses a dictionary for counting:\n```python\ndef counting_sort_dict(arr):\n    count = {}\n    for num in arr:\n        count[num] = count.get(num, 0) + 1\n    output = []\n    for num in sorted(count):\n        output.extend([num] * count[num])\n    return output\n```"
+            ]
+        },
+        {
+            "tag": "radix sort",
+            "patterns": [
+                "Can you show me how to implement radix sort?",
+                "Write a radix sort function",
+                "Explain radix sort with code",
+                "Def Radix sort",
+                "How does radix sort work in Python?"
+            ],
+            "responses": [
+                "Here’s a basic implementation of radix sort:\n```python\ndef counting_sort_for_radix(arr, exp):\n    n = len(arr)\n    output = [0] * n\n    count = [0] * 10\n\n    for i in range(n):\n        index = arr[i] // exp\n        count[index % 10] += 1\n\n    for i in range(1, 10):\n        count[i] += count[i - 1]\n\n    for i in range(n - 1, -1, -1):\n        index = arr[i] // exp\n        output[count[index % 10] - 1] = arr[i]\n        count[index % 10] -= 1\n\n    for i in range(n):\n        arr[i] = output[i]\n\n\ndef radix_sort(arr):\n    max_val = max(arr)\n    exp = 1\n    while max_val // exp > 0:\n        counting_sort_for_radix(arr, exp)\n        exp *= 10\n    return arr\n```",
+                "This implementation of radix sort works with strings:\n```python\ndef counting_sort_for_radix_strings(arr, index):\n    count = [0] * 256\n    output = [ for _ in range(len(arr))]\n\n    for s in arr:\n        count[ord(s[index])] += 1\n\n    for i in range(1, 256):\n        count[i] += count[i - 1]\n\n    for i in range(len(arr) - 1, -1, -1):\n        output[count[ord(arr[i][index])] - 1] = arr[i]\n        count[ord(arr[i][index])] -= 1\n\n    return output\n\n\ndef radix_sort_strings(arr):\n    max_length = max(len(s) for s in arr)\n    for index in range(max_length - 1, -1, -1):\n        arr = counting_sort_for_radix_strings(arr, index)\n    return arr\n```",
+                "This radix sort implementation supports negative numbers:\n```python\ndef radix_sort_negatives(arr):\n    negs = [num for num in arr if num < 0]\n    pos = [num for num in arr if num >= 0]\n    sorted_pos = radix_sort(pos)\n    sorted_negs = radix_sort([-num for num in negs])\n    return sorted_negs[::-1] + sorted_pos\n```",
+                "This version sorts by using a custom key:\n```python\ndef radix_sort_custom(arr, key=lambda x: x):\n    arr = sorted(arr, key=key)\n    return arr\n```"
+            ]
+        },
+        {
+            "tag": "shell sort",
+            "patterns": [
+                "Explain shell sort with an example",
+                "Write a function for shell sort",
+                "What is the shell sort algorithm?",
+                "Show me how to implement shell sort in Python",
+                "Can you give me the code for shell sort?"
+            ],
+            "responses": [
+                "Here’s a basic implementation of shell sort:\n```python\ndef shell_sort(arr):\n    n = len(arr)\n    gap = n // 2\n    while gap > 0:\n        for i in range(gap, n):\n            temp = arr[i]\n            j = i\n            while j >= gap and arr[j - gap] > temp:\n                arr[j] = arr[j - gap]\n                j -= gap\n            arr[j] = temp\n        gap //= 2\n    return arr\n```",
+                "This is a variant of shell sort that includes comments:\n```python\ndef shell_sort_verbose(arr):\n    n = len(arr)\n    gap = n // 2\n    while gap > 0:\n        for i in range(gap, n):\n            temp = arr[i]\n            j = i\n            while j >= gap and arr[j - gap] > temp:\n                arr[j] = arr[j - gap]\n                j -= gap\n            arr[j] = temp\n        gap //= 2\n    return arr\n```"
+            ]
+        },
+        {
+            "tag": "bucket sort",
+            "patterns": [
+                "How do I implement bucket sort?",
+                "Show me bucket sort code in Python",
+                "Explain bucket sort with code examples",
+                "What is the algorithm for bucket sort?",
+                "Can you provide a bucket sort function?"
+            ],
+            "responses": [
+                "Here’s a simple bucket sort implementation:\n```python\ndef bucket_sort(arr):\n    bucket = []\n    n = len(arr)\n    for i in range(n):\n        bucket.append([])\n\n    for j in arr:\n        index = int(n * j)\n        bucket[index].append(j)\n\n    for i in range(n):\n        bucket[i] = sorted(bucket[i])\n\n    k = 0\n    for i in range(n):\n        for j in range(len(bucket[i])):\n            arr[k] = bucket[i][j]\n            k += 1\n    return arr\n```",
+                "This bucket sort example uses a different approach:\n```python\ndef bucket_sort_alternate(arr):\n    max_value = max(arr)\n    size = max_value // len(arr)\n    buckets = [[] for _ in range(size + 1)]\n\n    for i in range(len(arr)):\n        index = arr[i] // size\n        if index != size:\n            buckets[index].append(arr[i])\n        else:\n            buckets[size - 1].append(arr[i])\n\n    for i in range(size):\n        buckets[i] = sorted(buckets[i])\n\n    result = []\n    for bucket in buckets:\n        result.extend(bucket)\n    return result\n```"
+            ]
+        }
+        
+    ]
+}

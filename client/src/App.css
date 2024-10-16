@@ -1,0 +1,214 @@
+.App {
+  text-align: left;
+  display: flex;
+  background-color: #282c34;
+  color: white;
+  position: absolute;
+  top: 0; bottom: 0; right: 0; left: 0;
+  overflow: hidden;
+}
+
+.sidemenu {
+  width: 260px;
+  background-color: #28242c;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chatbox {
+  flex: 1;
+  border-left: 1px solid #444;
+  background-color: #FAF9F6;
+  color: black;
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px 20px 20px 20px; /* Rounded corners for the right side */
+}
+
+.sidemenu-button{
+  background-color: #444;
+  border: none;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  margin-right: 2.5px;
+  border-radius: 10px 10px 10px 10px;
+  transition: ease 0.45s all;
+}
+.sidemenu-button:hover{
+  background-color: #4f4f4f;
+}
+
+.chat-input-holder {
+  display: flex; /* Align items horizontally */
+  align-items: center; /* Center items vertically */
+  background-color: #f5f5f5; /* Light background for input area */
+  border-radius: 25px; /* Rounded corners */
+  padding: 10px; /* Padding around input */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  position: fixed; /* Fix to the bottom */
+  bottom: 20px; /* 20px from the bottom of the screen */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center adjustment */
+  width: calc(100% - 40px); /* Responsive width with margins */
+  max-width: 800px; /* Maximum width for large screens */
+  margin: 0 auto; /* Centering */
+  z-index: 100; /* Ensure it is above other content */
+}
+
+.chat_input-textarea {
+  flex: 1; /* Make input field take available width */
+  border: none; /* Remove default border */
+  background-color: transparent; /* Transparent to match holder background */
+  padding: 10px; /* Inner padding */
+  outline: none; /* Remove blue outline on focus */
+  font-size: 16px; /* Font size */
+  color: #444; /* Text color */
+  border-radius: 30px; /* Matching rounded corners */
+  width: 770px; /* Set width to 50px */
+}
+
+
+.chat-log{
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between messages */
+}
+.chat-message{
+  display: flex;
+  align-items: flex-start; /* Align avatar and message */
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #ffffff; /* Light background for message bubble */
+}
+.avatar{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%; /* Circular avatar */
+  background-color: #888; /* Default avatar color */
+  color: white; /* Text color inside avatar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px; /* Spacing between avatar and message */
+  font-weight: bold; /* Bold font for avatar text */
+}
+.message{
+  background-color: transparent; /* Transparent to inherit bubble color */
+  padding-top: 5;
+  padding: 10px;
+  border-radius: 10px;
+  white-space: pre-wrap; /* Preserve whitespace and line breaks */
+  max-width: 100%; /* Take the remaining space */
+  flex-grow: 1; /* Allow the message to grow and fill available space */
+}
+
+.chat-message-server {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center; /* Vertically align avatar and message */
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #e8f0fe; /* Light background for server message bubble */
+}
+
+.chat-message-server .avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%; /* Circular avatar */
+  background-color: #4285f4; /* Blue background for server avatar */
+  color: white; /* Text color inside avatar */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px; /* Spacing between avatar and message */
+  font-weight: bold; /* Bold font for avatar text */
+  flex-shrink: 0; /* Prevent avatar from shrinking */
+}
+
+.chat-message-server .message {
+  background-color: transparent; /* Transparent to inherit bubble color */
+  padding: 10px;
+  border-radius: 10px;
+  white-space: pre-wrap; /* Preserve whitespace and line breaks */
+  max-width: 100%; /* Take the remaining space */
+  flex-grow: 1; /* Allow the message to grow and fill available space */
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.chat_submit-button{
+  background-color: #ff7f50; /* Orange background for button */
+  border: none; /* Remove default button border */
+  border-radius: 50%; /* Circular button */
+  padding: 10px; /* Padding inside button */
+  margin-left: 10px; /* Space between input and button */
+  cursor: pointer; /* Pointer cursor on hover */
+  display: flex; /* Flex for icon alignment */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+  color: white; /* Icon color */
+}
+
+.chat-button:hover{
+  background-color: #e56741; /* Darker shade on hover */
+
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.chat_submit-button {
+  background-color: #ff7f50;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.chat_submit-button:hover {
+  background-color: #e56741;
+}
+
+.submit-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
